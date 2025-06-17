@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block title %}Willkommen{% endblock %} {% block page_heading %}Willkommen zur Eisenhower-Matrix App{% endblock %} {% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h2>Was ist die Eisenhower-Matrix?</h2>
+        <p class="lead">
+            Die Eisenhower-Matrix hilft dir, Aufgaben nach ihrer <strong>Wichtigkeit</strong> und <strong>Dringlichkeit</strong> zu priorisieren.
+        </p>
+    </div>
+
+    <div class="row g-4 mt-4">
+        <div class="col-md-6">
+            <div class="p-4 border bg-success text-white">
+                <h4>Wichtig & Dringend</h4>
+                <p>Sofort selbst erledigen</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 border bg-primary text-white">
+                <h4>Wichtig & nicht Dringend</h4>
+                <p>Planen und später erledigen</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 border bg-warning text-dark">
+                <h4>Nicht wichtig & Dringend</h4>
+                <p>Delegieren</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 border bg-secondary text-white">
+                <h4>Nicht wichtig & nicht Dringend</h4>
+                <p>Ignorieren oder eliminieren</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="/todos" class="btn btn-outline-primary btn-lg">
+      jetzt starten
+    </a>
+    </div>
+</div>
+{% endblock %}

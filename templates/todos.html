@@ -1,0 +1,89 @@
+{% extends "base.html" %} {% block title %}ToDo Liste{% endblock %} {% block page_heading %}
+<i class="fas fa-clipboard-list me-2"></i>Meine ToDo-Liste {% endblock %} {% block content %}
+<div class="pb-5">
+    <!-- NEUE Aufgabe hinzufügen -->
+    <form action="/add" method="post" class="mb-4" autocomplete="off">
+        <div class="mb-3">
+            <label for="title" class="form-label">Was möchtest du erledigen?</label>
+            <input type="text" id="title" name="title" class="form-control" required autofocus />
+        </div>
+
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="importance" id="add-importance">
+            <label class="form-check-label" for="importance">Wichtig</label>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="urgency" id="add-urgency">
+            <label class="form-check-label" for="urgency">Dringend</label>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="fas fa-plus me-2"></i>Hinzufügen
+            </button>
+        </div>
+    </form>
+
+    {% for task in todo_list %}
+    <div class="todo-card mb-3 p-3 border rounded shadow-sm">
+        <div class="d-flex justify-content-between align-items-start">
+            <!-- Checkbox -->
+            <form action="/update/{{ task.id }}" method="post" class="me-3">
+                <input type="checkbox" class="status-toggle" data-id="{{ task.id }}" {% if task.property.completed %}checked{% endif %} title="Erledigt markieren oder zurücksetzen">
+
+            </form>
+
+            <!-- Aufgabenlink -->
+            <div class="flex-grow-1">
+                <a href="javascript:void(0);" class="fw-bold d-block {% if task.property.completed %}text-decoration-line-through text-muted{% endif %}" onclick="toggleEdit({{task.id}})" title="Bearbeiten">
+                    {{ task.title }}
+                </a>
+                <div class="mt-1">
+                    {% if task.property.importance %}
+                    <span class="badge bg-danger me-1">Wichtig</span> {% endif %} {% if task.property.urgency %}
+                    <span class="badge bg-warning text-dark me-1">Dringend</span> {% endif %} {% if task.created_date %}
+                    <small class="text-muted">Erstellt: {{ task.created_date.strftime('%d.%m.%Y') }}</small> {% endif %}
+                </div>
+            </div>
+
+            <!-- Löschen -->
+            <div>
+                <a href="/delete/{{ task.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Wirklich löschen?')" title="Aufgabe löschen">
+                    🗑️
+                </a>
+            </div>
+        </div>
+
+        <!-- Bearbeiten-Formular (versteckt) -->
+        <form action="/edit/{{ task.id }}" method="post" class="edit-form mt-3 d-none" id="edit-form-{{ task.id }}">
+            <div class="mb-2">
+                <input type="text" name="title" class="form-control" value="{{ task.title }}" required>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="importance" id="importance-{{ task.id }}" {% if task.property.importance %}checked{% endif %}>
+                <label class="form-check-label" for="importance-{{ task.id }}">Wichtig</label>
+            </div>
+            <div class="form-check form-check-inline mb-2">
+                <input class="form-check-input" type="checkbox" name="urgency" id="urgency-{{ task.id }}" {% if task.property.urgency %}checked{% endif %}>
+                <label class="form-check-label" for="urgency-{{ task.id }}">Dringend</label>
+            </div>
+            <div class="d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-primary btn-sm">Speichern</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEdit({{ task.id }})">Abbrechen</button>
+            </div>
+        </form>
+
+    </div>
+    {% endfor %}
+
+    <!-- Alle löschen -->
+    <form action="/clear" method="post" onsubmit="return confirm('Wirklich ALLE Aufgaben löschen?')" class="mt-4">
+        <div class="d-grid">
+            <button type="submit" class="btn btn-outline-danger">
+                <i class="fas fa-trash me-2"></i>Alle löschen
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
